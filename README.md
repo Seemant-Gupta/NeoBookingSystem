@@ -1,92 +1,104 @@
-Neo Booking System Backend
+# 🚍 Neo Booking System Backend
 
-A backend service built with Node.js, Express, and MongoDB for the Neo Booking System bus reservation platform. This API handles user accounts, bus discovery, seat checking, and ticket booking operations.
+![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
+![Express](https://img.shields.io/badge/Express.js-Framework-black)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-green)
+![JWT](https://img.shields.io/badge/Auth-JWT-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Main Features
-Secure user login and signup using JWT authentication
-Search buses with multiple filter options
-Check available and already-booked seats
-Create and manage passenger bookings
-Clean REST API structure for frontend integration
-Requirements
+A robust backend API built using **Node.js, Express, and MongoDB** for the **Neo Booking System**, a bus reservation platform that supports secure authentication, real-time seat tracking, and booking management.
 
-Before running the project, make sure you have:
+---
 
-Node.js version 14 or above
-MongoDB installed locally or a cloud database such as MongoDB Atlas
-npm or yarn
-Setup Instructions
-1. Open the backend folder
+## 📌 Overview
+
+The Neo Booking System backend is designed to handle all core operations of a bus booking application, including user management, bus search, seat availability tracking, and ticket booking.
+
+---
+
+## 🚀 Features
+
+- 🔐 JWT-based user authentication
+- 🔍 Bus search with filters (source, destination, price, company)
+- 💺 Seat availability tracking by journey date
+- 🧾 Booking creation and management
+- 📡 RESTful API design for frontend integration
+- 🗄️ MongoDB database integration
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Node.js, Express.js  
+- **Database:** MongoDB  
+- **Authentication:** JSON Web Tokens (JWT)  
+- **Tools:** Postman / Thunder Client  
+
+---
+
+## 📋 Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js (v14 or above)
+- MongoDB (Local or MongoDB Atlas)
+- npm or yarn
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/your-username/neoyatra-backend.git
 cd neoyatra-backend
-2. Install all required packages
+2️⃣ Install Dependencies
 npm install
-3. Configure environment variables
+3️⃣ Configure Environment Variables
 
-Create a .env file inside the backend folder and add the following:
+Create a .env file in the root directory:
 
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
-MongoDB Connection Options
+PORT=5000
+🔗 MongoDB Setup
 Using MongoDB Atlas
 Create an account on MongoDB Atlas
-Build a free cluster
-Copy the connection URI
-Replace the password section with your actual database password
+Create a free cluster
+Copy your connection string
 
 Example:
 
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/neoyatra?retryWrites=true&w=majority
 Using Local MongoDB
 MONGO_URI=mongodb://localhost:27017/neoyatra
-JWT Secret
-
-Set any strong random string as your JWT secret.
-
-Example:
-
-JWT_SECRET=my_secure_secret_key
-Optional: Add Sample Data
-
-To insert demo bus records into the database, run:
-
+4️⃣ Seed Sample Data (Optional)
 node seed.js
-
-This helps during testing by adding preloaded bus details.
-
-Run the Server
-
-Start the backend using:
-
+5️⃣ Run the Server
 npm run dev
 
-Once started, the server will run at:
+Server will run at:
 
-http://localhost:5000
-API Routes
-Authentication Routes
-Register a User
+👉 http://localhost:5000
 
+📡 API Endpoints
+🔐 Authentication
+Register User
 POST /api/auth/register
-
-Request body:
-
 {
   "name": "John Doe",
   "email": "john@example.com",
   "password": "password123"
 }
-Login
-
+Login User
 POST /api/auth/login
-
-Request body:
-
 {
   "email": "john@example.com",
   "password": "password123"
 }
 
-Response example:
+Response:
 
 {
   "token": "jwt_token_here",
@@ -96,12 +108,11 @@ Response example:
     "email": "john@example.com"
   }
 }
-Bus Routes
+🚌 Bus Routes
 Search Buses
-
 GET /api/buses
 
-Supported query parameters:
+Query Params:
 
 from
 to
@@ -112,40 +123,22 @@ Example:
 
 /api/buses?from=Delhi&to=Lucknow&maxPrice=1500
 Get Bus Details
-
 GET /api/buses/:id
-
-Returns details of a specific bus using its ID.
-
 Check Seat Availability
+GET /api/buses/:id/availability?journeyDate=YYYY-MM-DD
 
-GET /api/buses/:id/availability
-
-Required query parameter:
-
-journeyDate
-
-Example:
-
-/api/buses/123/availability?journeyDate=2025-08-30
-
-Sample response:
+Response:
 
 ["1A", "2B", "5C"]
-
-This response contains the seat numbers that are already booked for the selected journey date.
-
-Booking Routes
-Create a Booking
-
+🎟️ Booking Routes
+Create Booking (Protected)
 POST /api/bookings
 
-This is a protected route and requires a valid token in the x-auth-token header.
+Headers:
 
-Request body:
-
+x-auth-token: <your_token>
 {
-  "bus": "bus_id_here",
+  "bus": "bus_id",
   "seats": ["1A", "2B"],
   "passengers": [
     {
@@ -157,76 +150,72 @@ Request body:
   "total": 2400,
   "journeyDate": "2025-08-30"
 }
-View My Bookings
-
+Get My Bookings (Protected)
 GET /api/bookings/my-bookings
+🔒 Authentication
 
-This is also a protected route and requires the x-auth-token header.
-
-It returns all bookings for the logged-in user, including bus information.
-
-Authentication Note
-
-Any protected API route must include the JWT token in the request header.
-
-Example using Axios:
+Protected routes require a valid JWT token in headers:
 
 axios.get('/api/bookings/my-bookings', {
   headers: {
     'x-auth-token': 'your_jwt_token_here'
   }
 })
-Folder Structure
+📁 Project Structure
 neoyatra-backend/
+│
 ├── models/
 │   ├── User.js
 │   ├── Bus.js
 │   └── Booking.js
+│
 ├── routes/
 │   ├── auth.js
 │   ├── buses.js
 │   └── bookings.js
+│
 ├── middleware/
 │   └── auth.js
+│
 ├── db.js
 ├── server.js
 ├── seed.js
 ├── package.json
 └── .env
-Description
-models/ → Contains database schemas
-routes/ → Contains API route handlers
-middleware/ → Includes authentication middleware
-db.js → MongoDB connection configuration
-server.js → Main server entry point
-seed.js → Script for inserting demo bus data
-API Testing
+🧪 Testing the API
 
-You can test the endpoints using tools such as:
+Use tools like:
 
 Postman
-Thunder Client
-cURL
-
-Example commands:
-
-# Register a new user
+Thunder Client (VS Code extension)
+Example cURL
+# Register
 curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test User","email":"test@example.com","password":"password123"}'
+-H "Content-Type: application/json" \
+-d '{"name":"Test User","email":"test@example.com","password":"password123"}'
 
-# Login with existing account
+# Login
 curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"password123"}'
-Common Issues and Fixes
-Database Connection Problem
-Make sure the MONGO_URI value in .env is correct
-Confirm MongoDB is running if you are using a local database
-If using Atlas, check whether your IP is allowed in network settings
-Port Conflict
-Change the PORT value in .env
-Or stop the process already using port 5000
-JWT Error
-Verify that JWT_SECRET is present in the .env file
-Use a proper random string instead of leaving it blank
+-H "Content-Type: application/json" \
+-d '{"email":"test@example.com","password":"password123"}'
+🐛 Troubleshooting
+❌ MongoDB Connection Error
+Verify MONGO_URI
+Ensure MongoDB service is running
+Check Atlas network access
+❌ Port Already in Use
+Change PORT in .env
+Kill process using port 5000
+❌ JWT Issues
+Ensure JWT_SECRET is set
+Use a valid random string
+📈 Future Improvements
+Online payment integration
+Admin dashboard
+Email/SMS booking confirmation
+Real-time seat locking
+Ticket cancellation & refund system
+
+📜 License
+
+This project is licensed under the MIT License.
